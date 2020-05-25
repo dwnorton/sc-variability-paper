@@ -1,6 +1,7 @@
+/.idea/
 /conda/
 /Data/
 /Output/
-/txburst/
+/Scripts/
 .ipynb_checkpoints/
 __pycache__/
