@@ -60,3 +60,25 @@ def working_directory(path):
         yield
     finally:
         os.chdir(prev_wd)
+
+
+class GeneSymbolMap:
+    def __init__(self, mapping_df):
+        self._mapping_series = mapping_df.symbol
+
+    def lookup(self, gene_id):
+        return self._mapping_series[gene_id]
+
+    def added_to(self, df, map_key="gene"):
+        df = df.copy()
+
+        if df.index.name == map_key:
+            insert_index = 0
+            symbols = self._mapping_series[df.index]
+        else:
+            insert_index = df.columns.get_loc(map_key) + 1
+            symbols = df[map_key].map(self._mapping_series)
+
+        df.insert(insert_index, "gene_symbol", symbols)
+
+        return df
