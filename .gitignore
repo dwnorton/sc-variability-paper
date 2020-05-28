@@ -5,3 +5,4 @@
 /Scripts/
 .ipynb_checkpoints/
 __pycache__/
+*.ipynb.py
