@@ -5,6 +5,10 @@ import contextlib
 import os
 from pathlib import Path
 
+import pandas as pd
+
+from rp2.paths import get_data_path
+
 
 def create_folder(path, create_clean=False):
     path = Path(path)
@@ -54,7 +58,10 @@ class GeneSymbolMap:
 
     def added_to(self, df, map_key="gene"):
         df = df.copy()
+        self.add_to(df, map_key=map_key)
+        return df
 
+    def add_to(self, df, map_key="gene"):
         if df.index.name == map_key:
             insert_index = 0
             symbols = self._mapping_series[df.index]
@@ -64,4 +71,11 @@ class GeneSymbolMap:
 
         df.insert(insert_index, "gene_symbol", symbols)
 
-        return df
+
+def create_gene_symbol_map(species):
+    gene_symbols_df = pd.read_table(
+        get_data_path("BioMart", f"{species}_genes.tsv"),
+        names=["id", "symbol", "description"],
+        index_col=0
+    )
+    return GeneSymbolMap(gene_symbols_df)
