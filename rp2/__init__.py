@@ -72,10 +72,14 @@ class GeneSymbolMap:
         df.insert(insert_index, "gene_symbol", symbols)
 
 
-def create_gene_symbol_map(species):
-    gene_symbols_df = pd.read_table(
+def load_biomart_gene_symbols_df(species):
+    return pd.read_table(
         get_data_path("BioMart", f"{species}_genes.tsv"),
         names=["id", "symbol", "description"],
         index_col=0
     )
+
+
+def create_gene_symbol_map(species):
+    gene_symbols_df = load_biomart_gene_symbols_df(species)
     return GeneSymbolMap(gene_symbols_df)
