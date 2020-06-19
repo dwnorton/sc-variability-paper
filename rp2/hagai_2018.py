@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
+from rp2 import load_biomart_gene_symbols_df
 from rp2.paths import get_data_path
 
 
@@ -22,6 +23,18 @@ def load_lps_responsive_genes(species="mouse", max_padj=0.01):
 
 def load_umi_count(species):
     return anndata.read_h5ad(get_data_path("ArrayExpress", f"E-MTAB-6754.processed.2.{species}.h5ad"))
+
+
+def load_umi_counts_with_additional_annotation(species):
+    umi_count_ad = load_umi_count(species)
+
+    gene_info_df = load_biomart_gene_symbols_df(species)
+    umi_count_ad.var["symbol"] = gene_info_df.loc[umi_count_ad.var_names, "symbol"]
+
+    lps_responsive_ids = load_lps_responsive_genes()
+    umi_count_ad.var["lps_responsive"] = umi_count_ad.var_names.isin(lps_responsive_ids)
+
+    return umi_count_ad
 
 
 def calculate_umi_subset_condition_stats(umi_count_ad, obs_subset):
