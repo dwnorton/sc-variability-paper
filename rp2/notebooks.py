@@ -29,22 +29,25 @@ class NotebookEnvironment:
     def __init__(self, intermediate_path):
         self._intermediate_path = intermediate_path
 
-    def register_dependency(self, nb_name):
-        root_path = self._intermediate_path.parent
-        nb_intermediate_path = root_path.joinpath(make_intermediate_folder_name(nb_name))
-        if not nb_intermediate_path.is_dir():
-            raise NotebookDependencyError(f'Please execute notebook "{nb_name}" prior to running this one')
-
-        return NotebookDependency(nb_name, nb_intermediate_path)
-
     def get_intermediate_path(self, *names):
         return self._intermediate_path.joinpath(*names)
 
 
-def initialise_environment(nb_name):
+def initialise_environment(nb_name, dependencies=None):
     check_environment()
 
-    intermediate_path = get_output_path(".intermediate", make_intermediate_folder_name(nb_name))
+    root_path = get_output_path(".intermediate")
+
+    dependency_list = []
+    if dependencies is not None:
+        for dependency_name in dependencies:
+            dependency_path = root_path.joinpath(make_intermediate_folder_name(dependency_name))
+            if not dependency_path.is_dir():
+                raise NotebookDependencyError(f'Please execute notebook "{dependency_name}" prior to running this one')
+            dependency_list.append(NotebookDependency(nb_name, dependency_path))
+
+    intermediate_path = root_path.joinpath(make_intermediate_folder_name(nb_name))
     create_folder(intermediate_path, create_clean=True)
 
-    return NotebookEnvironment(intermediate_path)
+    nb_env = NotebookEnvironment(intermediate_path)
+    return nb_env if dependencies is None else [nb_env] + dependency_list
