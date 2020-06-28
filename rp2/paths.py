@@ -15,3 +15,12 @@ def get_output_path(*names):
 
 def get_scripts_path(*names):
     return scripts_path.joinpath(*names)
+
+
+def get_txburst_results_path(*names):
+    return get_output_path("txburst", *names)
+
+
+def get_txburst_results_csv_path(species, combined_replicates=False):
+    suffix = "_combined_replicates" if combined_replicates else ""
+    return get_txburst_results_path(f"{species}_responsive_genes{suffix}.csv")
