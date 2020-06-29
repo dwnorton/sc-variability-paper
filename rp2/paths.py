@@ -23,4 +23,4 @@ def get_txburst_results_path(*names):
 
 def get_txburst_results_csv_path(species, combined_replicates=False):
     suffix = "_combined_replicates" if combined_replicates else ""
-    return get_txburst_results_path(f"{species}_responsive_genes{suffix}.csv")
+    return get_txburst_results_path(f"{species}_umi{suffix}.csv")
