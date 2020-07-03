@@ -38,6 +38,25 @@ def load_umi_counts_with_additional_annotation(species):
     return umi_counts_adata
 
 
+def load_counts(species, scaling="umi"):
+    scaling_functions = {
+        "umi": lambda a: a,
+        "cpt": lambda a: create_normalised_adata(a, 1e3),
+        "cpm": lambda a: create_normalised_adata(a, 1e6),
+        "median": lambda a: create_normalised_adata(a, None),
+    }
+
+    if not isinstance(scaling, list):
+        scaling = [scaling]
+
+    umi_counts_adata = load_umi_counts_with_additional_annotation(species)
+    scanpy.pp.filter_genes(umi_counts_adata, min_counts=1)
+
+    results = [scaling_functions[s](umi_counts_adata) for s in scaling]
+
+    return results if len(results) > 1 else results[0]
+
+
 def calculate_counts_subset_condition_stats(umi_count_ad, obs_subset):
     counts_subset = umi_count_ad[obs_subset.index, :]
     counts_matrix = counts_subset.X.A
