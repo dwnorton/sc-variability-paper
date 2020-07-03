@@ -32,16 +32,25 @@ class ParameterisedFilename(os.PathLike):
         return self._filename + self._ext
 
     def append(self, text):
+        assert("-" not in text)
         if self._filename:
-            self._filename += "_"
+            self._filename += "-"
         self._filename += text
+        return self
+
+    def append_parameter(self, name, value):
+        if isinstance(value, (list, tuple)):
+            value = "+".join(value)
+        assert("=" not in name)
+        assert("=" not in value)
+        self.append(f"{name}={value}")
+        return self
 
 
-def get_txburst_results_csv_path(species, combined_replicates=False):
+def get_txburst_results_csv_path(species, index_columns):
     filename = ParameterisedFilename(ext="csv")
-    filename.append(species)
-    filename.append("umi")
-    if combined_replicates:
-        filename.append("combined_replicates")
+    filename.append_parameter("species", species)
+    filename.append_parameter("counts", "umi")
+    filename.append_parameter("index", index_columns)
 
     return get_txburst_results_path(filename)
