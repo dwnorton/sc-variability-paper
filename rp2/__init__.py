@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 
 import pandas as pd
+import scanpy
 
 from rp2.paths import get_data_path
 
@@ -104,3 +105,9 @@ def check_environment():
         print("Your Python environment does not contain the required dependencies.")
         print("Check README.md for details of configuring a Python environment.")
         raise Exception(f"seaborn package version >={min_seaborn_version} not installed")
+
+
+def create_normalised_adata(adata, target_sum):
+    scaled_adata = adata.copy()
+    scanpy.pp.normalize_total(scaled_adata, target_sum=target_sum)
+    return scaled_adata
