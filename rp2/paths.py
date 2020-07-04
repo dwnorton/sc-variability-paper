@@ -47,10 +47,10 @@ class ParameterisedFilename(os.PathLike):
         return self
 
 
-def get_txburst_results_csv_path(species, index_columns):
+def get_txburst_results_csv_path(species, index_columns, count_type="umi"):
     filename = ParameterisedFilename(ext="csv")
     filename.append_parameter("species", species)
-    filename.append_parameter("counts", "umi")
+    filename.append_parameter("counts", count_type)
     filename.append_parameter("index", index_columns)
 
     return get_txburst_results_path(filename)
