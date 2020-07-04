@@ -28,6 +28,9 @@ class ParameterisedFilename(os.PathLike):
         self._filename = ""
         self._ext = f".{ext}" or ""
 
+    def __str__(self):
+        return self._filename + self._ext
+
     def __fspath__(self):
         return self._filename + self._ext
 
