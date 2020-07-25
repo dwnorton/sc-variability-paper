@@ -2,25 +2,24 @@ import os
 from pathlib import Path
 
 
-data_path = Path(__file__).parent.parent.joinpath("Data")
-output_path = Path(__file__).parent.parent.joinpath("Output")
-scripts_path = Path(__file__).parent.parent.joinpath("Scripts")
+def make_path(*names):
+    return Path(__file__).parent.parent.joinpath(*names)
 
 
 def get_data_path(*names):
-    return data_path.joinpath(*names)
+    return make_path("Data", *names)
 
 
 def get_output_path(*names):
-    return output_path.joinpath(*names)
+    return make_path("Output", *names)
 
 
 def get_scripts_path(*names):
-    return scripts_path.joinpath(*names)
+    return make_path("Scripts", *names)
 
 
 def get_txburst_results_path(*names):
-    return get_output_path("txburst", *names)
+    return make_path("Models", "txburst", *names)
 
 
 class ParameterisedFilename(os.PathLike):
