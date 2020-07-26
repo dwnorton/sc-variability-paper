@@ -18,8 +18,12 @@ def get_scripts_path(*names):
     return make_path("Scripts", *names)
 
 
+def get_model_path(model_type, *names):
+    return make_path("Models", model_type, *names)
+
+
 def get_txburst_results_path(*names):
-    return make_path("Models", "txburst", *names)
+    return get_model_path("txburst", *names)
 
 
 class ParameterisedFilename(os.PathLike):
@@ -49,10 +53,14 @@ class ParameterisedFilename(os.PathLike):
         return self
 
 
-def get_txburst_results_csv_path(species, index_columns, count_type="umi"):
+def get_burst_model_csv_path(model_type, species, index_columns, count_type):
     filename = ParameterisedFilename(ext="csv")
     filename.append_parameter("species", species)
     filename.append_parameter("counts", count_type)
     filename.append_parameter("index", index_columns)
 
-    return get_txburst_results_path(filename)
+    return get_model_path(model_type, filename)
+
+
+def get_txburst_results_csv_path(species, index_columns, count_type="umi"):
+    return get_burst_model_csv_path("txburst", species, index_columns, count_type)
