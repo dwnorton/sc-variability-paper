@@ -12,7 +12,7 @@ def load_txburst_results(species, index_columns, count_type):
 
 def load_modified_txburst_results(species, condition_columns, count_type, two_alleles=False):
     df = load_txburst_results(species, condition_columns, count_type)
-    df = df.loc[df.bf_point.notna() & df.bs_point.notna()]
+    df = df.loc[df.keep]
 
     df["bf_point"] = (2 * df.k_on * df.k_off) / (df.k_on + df.k_off) if two_alleles else df.k_on
     df["bs_point"] = df.k_syn / df.k_off
