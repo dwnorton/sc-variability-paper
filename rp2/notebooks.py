@@ -2,7 +2,7 @@ from rp2 import check_environment, create_folder
 from rp2.paths import get_output_path
 
 
-schema_version = 1
+schema_version = 2
 
 
 def make_intermediate_folder_name(nb_name):
