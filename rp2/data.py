@@ -10,7 +10,7 @@ def load_txburst_results(species, index_columns, count_type):
     return pd.read_csv(csv_path, dtype=dtype_dict)
 
 
-def load_and_recalculate_txburst_results(species, condition_columns, count_type, bursty=True):
+def load_and_recalculate_txburst_results(species, condition_columns, count_type, bursty=False):
     df = load_txburst_results(species, condition_columns, count_type)
     df = df.loc[df.keep]
 
