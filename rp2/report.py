@@ -18,11 +18,9 @@ display_name_value_map = {
 
 
 def make_display_series(series):
-    try:
+    if series.name in display_name_value_map:
         value_map = display_name_value_map[series.name]
         series = series.map(value_map)
         series = series.astype(pd.CategoricalDtype(categories=value_map.values()))
-    except KeyError:
-        pass
     series = series.rename(display_name_param_map[series.name])
     return series
