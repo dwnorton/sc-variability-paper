@@ -1,8 +1,8 @@
+import contextlib
+import os
 import shutil
 import urllib.parse
 import urllib.request
-import contextlib
-import os
 from pathlib import Path
 
 import pandas as pd
@@ -79,6 +79,17 @@ def load_biomart_gene_symbols_df(species):
         names=["id", "symbol", "description"],
         index_col=0
     )
+
+
+def load_mouse_orthologues():
+    df = pd.read_table(
+        get_data_path("BioMart", "mouse_orthologues.tsv"),
+        names=["mouse_gene", "pig_gene", "rabbit_gene", "rat_gene"],
+        index_col=0,
+    )
+    df = df.dropna(axis=0)
+    df = df.loc[~df.index.duplicated(False)]
+    return df
 
 
 def create_gene_symbol_map(species):
