@@ -13,6 +13,10 @@ class Analysis:
         return self._condition_columns
 
     @property
+    def index_columns(self):
+        return ["gene"] + self._condition_columns
+
+    @property
     def species(self):
         return self._species
 
