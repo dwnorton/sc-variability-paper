@@ -32,8 +32,9 @@ def load_umi_counts_with_additional_annotation(species):
     gene_info_df = load_biomart_gene_symbols_df(species)
     umi_counts_adata.var["symbol"] = gene_info_df.loc[umi_counts_adata.var_names, "symbol"]
 
-    lps_responsive_ids = load_lps_responsive_genes()
-    umi_counts_adata.var["lps_responsive"] = umi_counts_adata.var_names.isin(lps_responsive_ids)
+    if species == "mouse":
+        lps_responsive_ids = load_lps_responsive_genes()
+        umi_counts_adata.var["lps_responsive"] = umi_counts_adata.var_names.isin(lps_responsive_ids)
 
     return umi_counts_adata
 
@@ -46,15 +47,15 @@ def load_counts(species, scaling="umi"):
         "median": lambda a: create_normalised_adata(a, None),
     }
 
-    if not isinstance(scaling, list):
-        scaling = [scaling]
+    scaling_is_list = isinstance(scaling, list)
+    scaling_list = scaling if scaling_is_list else [scaling]
 
     umi_counts_adata = load_umi_counts_with_additional_annotation(species)
     scanpy.pp.filter_genes(umi_counts_adata, min_counts=1)
 
-    results = [scaling_functions[s](umi_counts_adata) for s in scaling]
+    results = [scaling_functions[s](umi_counts_adata) for s in scaling_list]
 
-    return results if len(results) > 1 else results[0]
+    return results if scaling_is_list else results[0]
 
 
 def calculate_counts_subset_condition_stats(umi_count_ad, obs_subset):
