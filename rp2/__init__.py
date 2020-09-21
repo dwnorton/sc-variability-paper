@@ -8,6 +8,7 @@ from pathlib import Path
 import pandas as pd
 import scanpy
 
+from rp2.environment import make_semver, get_package_version
 from rp2.paths import get_data_path
 
 
@@ -95,27 +96,6 @@ def load_mouse_orthologues():
 def create_gene_symbol_map(species):
     gene_symbols_df = load_biomart_gene_symbols_df(species)
     return GeneSymbolMap(gene_symbols_df)
-
-
-def check_environment():
-    def make_semver(version_string):
-        components = [int(v) for v in version_string.split(".")]
-        if len(components) != 3:
-            raise ValueError(f"Invalid version ({version_string})")
-        return components
-
-    min_seaborn_version = "0.10.1"
-    try:
-        import seaborn
-        required_version = make_semver(min_seaborn_version)
-        actual_version_str = seaborn.__version__
-        actual_version = make_semver(actual_version_str)
-        if actual_version < required_version:
-            raise ValueError(f"Dependency >={min_seaborn_version} not satisfied by {actual_version_str}")
-    except Exception:
-        print("Your Python environment does not contain the required dependencies.")
-        print("Check README.md for details of configuring a Python environment.")
-        raise Exception(f"seaborn package version >={min_seaborn_version} not installed")
 
 
 def create_normalised_adata(adata, target_sum):

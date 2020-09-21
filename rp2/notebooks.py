@@ -1,4 +1,5 @@
-from rp2 import check_environment, create_folder
+from rp2 import create_folder
+from rp2.environment import check_environment
 from rp2.paths import get_output_path
 
 
