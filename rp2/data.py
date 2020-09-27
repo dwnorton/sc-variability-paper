@@ -1,3 +1,4 @@
+from rp2 import paths
 from rp2.paths import get_txburst_results_csv_path
 
 import pandas as pd
@@ -18,3 +19,7 @@ def load_and_recalculate_txburst_results(species, condition_columns, count_type,
     df["bs_point"] = df.k_syn / df.k_off
 
     return df.drop(columns=["bf_lower", "bf_upper", "bs_lower", "bs_upper", "keep"])
+
+
+def load_rp2_analysis_genes():
+    return pd.read_csv(paths.get_data_path("rp2_analysis_genes.csv"), index_col=0)
