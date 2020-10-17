@@ -22,4 +22,4 @@ def load_and_recalculate_txburst_results(species, condition_columns, count_type,
 
 
 def load_rp2_analysis_genes():
-    return pd.read_csv(paths.get_data_path("RP2", "analysis_genes.csv"), index_col=0)
+    return pd.read_csv(paths.get_rp2_path("analysis_genes.csv"), index_col=0)

@@ -18,6 +18,10 @@ def get_scripts_path(*names):
     return make_path("Scripts", *names)
 
 
+def get_rp2_path(*names):
+    return get_data_path("RP2", *names)
+
+
 def get_model_path(model_type, *names):
     return make_path("Models", model_type, *names)
 
