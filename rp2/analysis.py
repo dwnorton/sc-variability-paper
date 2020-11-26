@@ -1,4 +1,4 @@
-from rp2 import hagai_2018, load_mouse_orthologues, load_biomart_gene_symbols_df
+from rp2 import hagai_2018, load_one_to_one_mouse_orthologues, load_biomart_gene_symbols_df
 
 
 class Analysis:
@@ -29,7 +29,7 @@ class Analysis:
             return self
 
         if self._orthologues_df is None:
-            self._orthologues_df = load_mouse_orthologues().reset_index()
+            self._orthologues_df = load_one_to_one_mouse_orthologues().reset_index()
 
         gene_mask = self._orthologues_df[f"{self._species}_gene"].isin(self._gene_ids)
         orthologue_gene_ids = self._orthologues_df.loc[gene_mask, f"{species}_gene"].to_list()

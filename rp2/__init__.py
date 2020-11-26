@@ -82,7 +82,7 @@ def load_biomart_gene_symbols_df(species):
     )
 
 
-def load_mouse_orthologues():
+def load_one_to_one_mouse_orthologues():
     df = pd.read_table(
         get_data_path("BioMart", "mouse_orthologues.tsv"),
         names=["mouse_gene", "pig_gene", "rabbit_gene", "rat_gene"],
