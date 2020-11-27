@@ -82,15 +82,19 @@ def load_biomart_gene_symbols_df(species):
     )
 
 
-def load_one_to_one_mouse_orthologues():
+def load_mouse_orthologues():
     df = pd.read_table(
         get_data_path("BioMart", "mouse_orthologues.tsv"),
         names=["mouse_gene", "pig_gene", "rabbit_gene", "rat_gene"],
-        index_col=0,
     )
-    df = df.dropna(axis=0)
-    df = df.loc[~df.index.duplicated(False)]
     return df
+
+
+def load_one_to_one_mouse_orthologues():
+    df = load_mouse_orthologues()
+    df = df.dropna(axis=0)
+    df = df.loc[~df.mouse_gene.duplicated(False)]
+    return df.set_index("mouse_gene")
 
 
 def create_gene_symbol_map(species):
